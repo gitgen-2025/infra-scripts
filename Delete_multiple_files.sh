@@ -4,21 +4,27 @@
 
 #Step 1 List files to delete
  
-echo "Deleting the following files:"
-FILES=("file1.txt" "file2.py" "file3.md" "file4.js" "file5.html""file6.json")
-for f in "${FILES[@]}"; do echo " -$f"
+echo "Enter the names of the files to delete from Github (space-separated):"
+read FILE_LIST
+
+#Convert the string into an array manually
+FILES=$(echo "$FILE_LIST")
+
+#Check if input was empty
+if [ -z "$FILES" ]; then
+  echo "No files entered.Exiting."
+  exit 1` 
+fi
+
+#Step 2 Prepare to delete 
+echo "Preparing to delete the following files from Github:"
+for f in $FILES; do
+  echo "-$f"
+  git rm --cached "$f"
 done
 
-#Step 2: Remove files locally
-rm "${FILES[@]}"
-echo "Files deleted locally."
-
-#Step 3:Stage Deletions
- git add "${FILES[@]}"
-echo "Deletions Staged."
-
-#Step 4 Commit Changes
-git commit -m "Delete multiple files"
+#Step 3 Commit Changes
+git commit -m "Delete  files from Github only "
 echo "Changes commited."
 
 #Step 5:Push to remote
